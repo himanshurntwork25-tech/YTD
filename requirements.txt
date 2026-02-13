@@ -1,0 +1,6 @@
+yt-dlp
+pytube
+ffmpeg-python
+fastapi
+uvicorn
+pydantic
