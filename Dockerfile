@@ -11,6 +11,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg \
 
 # Set working directory
 WORKDIR /app
+RUN mkdir -p /app/downloads
+
 
 # Copy requirements first (for Docker caching)
 COPY requirements.txt .

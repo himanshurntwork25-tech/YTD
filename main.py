@@ -109,9 +109,14 @@ def validate_youtube_url(url: str):
     raise ValueError("Invalid YouTube URL format")
 
 
+# def get_downloads_folder():
+#     downloads_path = Path.home() / "Downloads"
+#     return str(downloads_path)
 def get_downloads_folder():
-    downloads_path = Path.home() / "Downloads"
-    return str(downloads_path)
+    downloads_path = os.path.join(BASE_DIR, "downloads")
+    os.makedirs(downloads_path, exist_ok=True)
+    return downloads_path
+
 
 
 def download_video(url, output_path=None, max_retries=3):
