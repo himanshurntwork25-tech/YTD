@@ -8,6 +8,7 @@ import logging
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+import shutil
 
 # Configure logging
 logging.basicConfig(
@@ -17,14 +18,38 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# if os.getenv("DEPLOYMENT") == "server":
+#     FFMPEG_PATH = "ffmpeg"
+# elif platform.system() == "Windows":
+#     FFMPEG_PATH = os.path.join(BASE_DIR, "ffmpeg", "ffmpeg.exe")
+# else:
+#     FFMPEG_PATH = os.path.join(BASE_DIR, "ffmpeg", "ffmpeg")
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-if os.getenv("DEPLOYMENT") == "server":
-    FFMPEG_PATH = "ffmpeg"
-elif platform.system() == "Windows":
-    FFMPEG_PATH = os.path.join(BASE_DIR, "ffmpeg", "ffmpeg.exe")
-else:
-    FFMPEG_PATH = os.path.join(BASE_DIR, "ffmpeg", "ffmpeg")
+def get_ffmpeg_path():
+    # 1. Check if system ffmpeg exists (Linux, Mac, Windows with PATH)
+    system_ffmpeg = shutil.which("ffmpeg")
+    if system_ffmpeg:
+        return system_ffmpeg
+
+    # 2. Check local bundled ffmpeg
+    if platform.system() == "Windows":
+        local_ffmpeg = os.path.join(BASE_DIR, "ffmpeg", "ffmpeg.exe")
+    else:
+        local_ffmpeg = os.path.join(BASE_DIR, "ffmpeg", "ffmpeg")
+
+    if os.path.exists(local_ffmpeg):
+        return local_ffmpeg
+
+    # 3. If not found, raise error
+    raise RuntimeError(
+        "FFmpeg not found. Please install ffmpeg or place it in ffmpeg folder."
+    )
+
+FFMPEG_PATH = get_ffmpeg_path()
 
 app = FastAPI(title="YouTube Downloader API")
 
