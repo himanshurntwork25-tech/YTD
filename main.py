@@ -145,18 +145,53 @@ def download_video(url, output_path=None, max_retries=3):
 
     os.makedirs(output_path, exist_ok=True)
 
+    # ydl_opts = {
+    #     "format": "bestvideo+bestaudio/best",
+    #     "outtmpl": os.path.join(output_path, "%(title)s.%(ext)s"),
+    #     "merge_output_format": "mp4",
+    #     "ffmpeg_location": FFMPEG_PATH,
+    #     "restrictfilenames": True,
+    #     "quiet": True,
+    #     "retries": max_retries,
+    #     "fragment_retries": max_retries,
+    #     "skip_unavailable_fragments": True,
+    #     "cookiefile": os.path.join(BASE_DIR, "cookies.txt"),
+    #     "extractor_args": {
+    #         "youtube": {
+    #             "player_client": ["android", "web"]
+    #         }
+    #     }
+    # }
     ydl_opts = {
         "format": "bestvideo+bestaudio/best",
         "outtmpl": os.path.join(output_path, "%(title)s.%(ext)s"),
         "merge_output_format": "mp4",
         "ffmpeg_location": FFMPEG_PATH,
+
         "restrictfilenames": True,
         "quiet": True,
         "retries": max_retries,
         "fragment_retries": max_retries,
         "skip_unavailable_fragments": True,
-        "cookies": os.path.join(BASE_DIR, "cookies.txt"),
+
+        "cookiefile": os.path.join(BASE_DIR, "cookies.txt"),
+
+        "nocheckcertificate": True,
+        "geo_bypass": True,
+        "geo_bypass_country": "US",
+
+        "http_headers": {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36"
+        },
+
+        "extractor_args": {
+            "youtube": {
+                "player_client": ["android", "web"]
+            }
+        }
     }
+
+
 
     for attempt in range(max_retries):
         try:
@@ -192,11 +227,50 @@ def download_audio(url, output_path=None, max_retries=3):
 
     os.makedirs(output_path, exist_ok=True)
 
+    # ydl_opts = {
+    #     "format": "bestaudio/best",
+    #     "outtmpl": os.path.join(output_path, "%(title)s.%(ext)s"),
+    #     "ffmpeg_location": FFMPEG_PATH,
+    #     "restrictfilenames": True,
+    #     "postprocessors": [
+    #         {
+    #             "key": "FFmpegExtractAudio",
+    #             "preferredcodec": "mp3",
+    #             "preferredquality": "192",
+    #         }
+    #     ],
+    #     "quiet": True,
+    #     "retries": max_retries,
+    #     "fragment_retries": max_retries,
+    #     "skip_unavailable_fragments": True,
+    #     "cookiefile": os.path.join(BASE_DIR, "cookies.txt"),
+    #     "extractor_args": {
+    #         "youtube": {
+    #             "player_client": ["android", "web"]
+    #         }
+    #     }
+    # }
     ydl_opts = {
         "format": "bestaudio/best",
         "outtmpl": os.path.join(output_path, "%(title)s.%(ext)s"),
         "ffmpeg_location": FFMPEG_PATH,
+
         "restrictfilenames": True,
+        "quiet": True,
+        "retries": max_retries,
+        "fragment_retries": max_retries,
+        "skip_unavailable_fragments": True,
+
+        "cookiefile": os.path.join(BASE_DIR, "cookies.txt"),
+
+        "nocheckcertificate": True,
+        "geo_bypass": True,
+        "geo_bypass_country": "US",
+
+        "http_headers": {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36"
+        },
+
         "postprocessors": [
             {
                 "key": "FFmpegExtractAudio",
@@ -204,12 +278,14 @@ def download_audio(url, output_path=None, max_retries=3):
                 "preferredquality": "192",
             }
         ],
-        "quiet": True,
-        "retries": max_retries,
-        "fragment_retries": max_retries,
-        "skip_unavailable_fragments": True,
-        "cookies": os.path.join(BASE_DIR, "cookies.txt"),
+
+        "extractor_args": {
+            "youtube": {
+                "player_client": ["android", "web"]
+            }
+        }
     }
+
 
     for attempt in range(max_retries):
         try:

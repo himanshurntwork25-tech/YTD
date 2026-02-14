@@ -1,4 +1,4 @@
-yt-dlp>=2025.1.0
+yt-dlp>=2025.01.15
 pytube
 ffmpeg-python
 fastapi
