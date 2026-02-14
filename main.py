@@ -112,10 +112,18 @@ def validate_youtube_url(url: str):
 # def get_downloads_folder():
 #     downloads_path = Path.home() / "Downloads"
 #     return str(downloads_path)
+# def get_downloads_folder():
+#     downloads_path = os.path.join(BASE_DIR, "downloads")
+#     os.makedirs(downloads_path, exist_ok=True)
+#     return downloads_path
 def get_downloads_folder():
-    downloads_path = os.path.join(BASE_DIR, "downloads")
-    os.makedirs(downloads_path, exist_ok=True)
-    return downloads_path
+    if platform.system() == "Windows":
+        return str(Path.home() / "Downloads")
+    else:
+        downloads_path = os.path.join(BASE_DIR, "downloads")
+        os.makedirs(downloads_path, exist_ok=True)
+        return downloads_path
+
 
 
 
@@ -147,6 +155,7 @@ def download_video(url, output_path=None, max_retries=3):
         "retries": max_retries,
         "fragment_retries": max_retries,
         "skip_unavailable_fragments": True,
+        "cookies": os.path.join(BASE_DIR, "cookies.txt"),
     }
 
     for attempt in range(max_retries):
@@ -199,6 +208,7 @@ def download_audio(url, output_path=None, max_retries=3):
         "retries": max_retries,
         "fragment_retries": max_retries,
         "skip_unavailable_fragments": True,
+        "cookies": os.path.join(BASE_DIR, "cookies.txt"),
     }
 
     for attempt in range(max_retries):
